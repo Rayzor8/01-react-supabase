@@ -1,18 +1,19 @@
-import { useState } from "react";
-import { Button } from "./components/ui/button";
-import Container from "./components/ui/container";
-import supabase from "./config/supabase-client";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
+// pages
+import Home from "@/pages/homepage";
+import Navbar from "./components/navbar";
 
 function App() {
-  const [count, setCount] = useState(0);
-  console.log(supabase);
   return (
-    <Container>
-      <Button size="lg" onClick={() => setCount((count) => count + 1)}>
-        Test button
-      </Button>
-      <h1 className="text-3xl font-bold"> {count}</h1>
-    </Container>
+    <BrowserRouter>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        {/* <Route path="/create" element={<Create />} />
+        <Route path="/:id" element={<Update />} /> */}
+      </Routes>
+    </BrowserRouter>
   );
 }
 
