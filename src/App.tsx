@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // pages
 import Home from "@/pages/homepage";
 import Navbar from "./components/navbar";
+import FormEditor from "./pages/form-editor";
 
 function App() {
   return (
@@ -10,8 +11,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        {/* <Route path="/create" element={<Create />} />
-        <Route path="/:id" element={<Update />} /> */}
+        <Route path="/form/:slug" element={<FormEditor />} />
       </Routes>
     </BrowserRouter>
   );

@@ -26,11 +26,28 @@ const usePokedeckOperations = (initialData: Pokedeck[] | null = null) => {
     }
   };
 
+  const addPokedeck = async (pokedeck: Pokedeck) => {
+    setIsLoading(true);
+    try {
+      const { error } = await supabase.from("pokedecks").insert([pokedeck]);
+      if (error) {
+        setFetchError("Failed to add Pokedeck !!");
+        throw error;
+      }
+      setFetchError(null);
+    } catch (error) {
+      console.log(error as PostgrestError);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return {
     pokeDecks,
     isLoading,
     fetchError,
     fetchPokeDecks,
+    addPokedeck,
   };
 };
 

@@ -1,6 +1,6 @@
 type Pokedeck = {
   id: number;
-  created_at: string;
+  created_at: Date;
   name: string;
   description: string;
   rating: number;
