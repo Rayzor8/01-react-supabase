@@ -32,7 +32,8 @@ const usePokedeckOperations = () => {
       const { data, error } = await supabase
         .from("pokedecks")
         .select("*")
-        .eq("id", id);
+        .eq("id", id)
+        .single();
 
       if (error) {
         setFetchError("Failed to fetch Pokedecks !!");

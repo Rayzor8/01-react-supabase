@@ -3,6 +3,9 @@ import Container from "@/components/ui/container";
 import usePokedeckOperations from "@/hooks/usePokedeckAction";
 import CardDeck from "./card-deck";
 import Banner from "./banner";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
+import Loading from "@/components/ui/loading";
 
 function Homepage() {
   const { data, isLoading, fetchPokeDecks, fetchError } =
@@ -12,13 +15,16 @@ function Homepage() {
     fetchPokeDecks();
   }, []);
 
-  if (isLoading)
-    return <p className="text-center text-xl text-blue-600 my-8">Loading...</p>;
-
   if (fetchError)
     return (
-      <p className="text-center text-xl text-red-600 my-8">{fetchError}</p>
+      <Alert variant="destructive" className="max-w-md mx-auto my-4">
+        <ExclamationTriangleIcon className="h-4 w-4" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>{fetchError}</AlertDescription>
+      </Alert>
     );
+
+  if (isLoading) return <Loading />;
 
   return (
     <main>
