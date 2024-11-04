@@ -1,15 +1,13 @@
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardFooter,
-  CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { formatDate } from "@/lib/utils";
 import { Pokedeck } from "@/types";
-import { BadgePlus, Star, CircleX, SquarePen } from "lucide-react";
+import { BadgePlus, Star, CircleX } from "lucide-react";
 import { MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -17,11 +15,6 @@ export default function CardDeck({ pokeDeck }: { pokeDeck: Pokedeck }) {
   const navigate = useNavigate();
 
   const onDetail = (id: number) => {
-    alert(id);
-  };
-
-  const onEdit = (e: MouseEvent, id: number) => {
-    e.stopPropagation();
     navigate(`/form/${id}`);
   };
 
@@ -35,14 +28,11 @@ export default function CardDeck({ pokeDeck }: { pokeDeck: Pokedeck }) {
       className=" bg-yellow-100 border-4 border-blue-500 cursor-pointer relative"
       onClick={() => onDetail(pokeDeck.id)}
     >
-      <Button
-        size="icon"
-        variant="destructive"
-        className="absolute -top-3 -right-3 rounded-full shadow-lg hover:shadow-xl transition-shadow"
-      >
-        <CircleX />
+      <button onClick={(e) => onDelete(e, pokeDeck.id)}>
+        <CircleX className="absolute -top-3 -right-3 rounded-full shadow-lg hover:shadow-xl transition-shadow  text-red-500 fill-white hover:text-red-600" />
         <span className="sr-only">Close</span>
-      </Button>
+      </button>
+
       <CardContent className="p-4">
         <CardTitle className="flex flex-col gap-2">
           <div className="flex justify-between items-center">
@@ -77,8 +67,6 @@ export default function CardDeck({ pokeDeck }: { pokeDeck: Pokedeck }) {
             />
           ))}
         </div>
-
-        
       </CardFooter>
     </Card>
   );

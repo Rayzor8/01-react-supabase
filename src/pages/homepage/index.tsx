@@ -5,7 +5,7 @@ import CardDeck from "./card-deck";
 import Banner from "./banner";
 
 function Homepage() {
-  const { pokeDecks, isLoading, fetchPokeDecks, fetchError } =
+  const { data, isLoading, fetchPokeDecks, fetchError } =
     usePokedeckOperations();
 
   useEffect(() => {
@@ -24,9 +24,9 @@ function Homepage() {
     <main>
       <Banner />
       <Container className="mt-8">
-        {pokeDecks && (
+        {Array.isArray(data) && (
           <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {pokeDecks.map((pokeDeck) => (
+            {data.map((pokeDeck) => (
               <li key={pokeDeck.id}>
                 <CardDeck pokeDeck={pokeDeck} />
               </li>

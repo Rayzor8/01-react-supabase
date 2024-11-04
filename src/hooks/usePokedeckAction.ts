@@ -3,8 +3,8 @@ import supabase from "@/config/supabase-client";
 import { PostgrestError } from "@supabase/supabase-js";
 import { Pokedeck } from "@/types";
 
-const usePokedeckOperations = (initialData: Pokedeck[] | null = null) => {
-  const [pokeDecks, setPokeDecks] = useState<Pokedeck[] | null>(initialData);
+const usePokedeckOperations = () => {
+  const [data, setData] = useState<Pokedeck[] | Pokedeck | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [fetchError, setFetchError] = useState<string | null>(null);
 
@@ -14,10 +14,39 @@ const usePokedeckOperations = (initialData: Pokedeck[] | null = null) => {
       const { data, error } = await supabase.from("pokedecks").select("*");
       if (error) {
         setFetchError("Failed to fetch Pokedecks !!");
-        setPokeDecks(null);
+        setData(null);
         throw error;
       }
-      setPokeDecks(data);
+      setData(data);
+      setFetchError(null);
+    } catch (error) {
+      console.log(error as PostgrestError);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const getDetailPokeDeck = async (id: number) => {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from("pokedecks")
+        .select("*")
+        .eq("id", id);
+
+      if (error) {
+        setFetchError("Failed to fetch Pokedecks !!");
+        setData(null);
+        throw error;
+      }
+
+      if (data.length === 0) {
+        setFetchError("Pokedeck not found !!");
+        setData(null);
+        throw new Error("Pokedeck not found !!");
+      }
+
+      setData(data);
       setFetchError(null);
     } catch (error) {
       console.log(error as PostgrestError);
@@ -43,10 +72,11 @@ const usePokedeckOperations = (initialData: Pokedeck[] | null = null) => {
   };
 
   return {
-    pokeDecks,
+    data,
     isLoading,
     fetchError,
     fetchPokeDecks,
+    getDetailPokeDeck,
     addPokedeck,
   };
 };
