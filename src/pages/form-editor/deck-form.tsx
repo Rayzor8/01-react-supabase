@@ -14,6 +14,8 @@ import { Button } from "@/components/ui/button";
 import { AlertCircle, CircleX } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Pokedeck } from "@/types";
+import usePokedeckOperations from "@/hooks/usePokedeckAction";
+import { useNavigate } from "react-router-dom";
 
 const pokeDeckSchema = z.object({
   name: z
@@ -42,6 +44,9 @@ export default function DeckForm({ deckData, isCreateDeck }: DeckFormProps) {
   const [description, setDescription] = useState("");
   const [rating, setRating] = useState(1);
   const [errors, setErrors] = useState<Partial<PokeDeckFormData>>({});
+  const { addPokedeck, updatePokedeck } = usePokedeckOperations();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (deckData && !Array.isArray(deckData)) {
@@ -68,9 +73,18 @@ export default function DeckForm({ deckData, isCreateDeck }: DeckFormProps) {
 
     try {
       pokeDeckSchema.parse(formData);
+      if (isCreateDeck) {
+        addPokedeck(formData);
+      } else {
+        updatePokedeck({
+          id: Number(deckData?.id) ,
+          ...formData,
+        });
+      }
       setName("");
       setDescription("");
       setRating(0);
+      navigate("/");
     } catch (error) {
       if (error instanceof z.ZodError) {
         setErrors(error.formErrors.fieldErrors);

@@ -56,7 +56,11 @@ const usePokedeckOperations = () => {
     }
   };
 
-  const addPokedeck = async (pokedeck: Pokedeck) => {
+  const addPokedeck = async (pokedeck: {
+    name: string;
+    description: string;
+    rating: number;
+  }) => {
     setIsLoading(true);
     try {
       const { error } = await supabase.from("pokedecks").insert([pokedeck]);
@@ -72,6 +76,30 @@ const usePokedeckOperations = () => {
     }
   };
 
+  const updatePokedeck = async (pokedeck: {
+    id: number;
+    name: string;
+    description: string;
+    rating: number;
+  }) => {
+    setIsLoading(true);
+    try {
+      const { error } = await supabase
+        .from("pokedecks")
+        .update(pokedeck)
+        .eq("id", pokedeck.id);
+      if (error) {
+        setFetchError("Failed to update Pokedeck !!");
+        throw error;
+      }
+      setFetchError(null);
+    } catch (error) {
+      console.log(error as PostgrestError);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return {
     data,
     isLoading,
@@ -79,6 +107,7 @@ const usePokedeckOperations = () => {
     fetchPokeDecks,
     getDetailPokeDeck,
     addPokedeck,
+    updatePokedeck
   };
 };
 

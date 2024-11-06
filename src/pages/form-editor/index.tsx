@@ -42,9 +42,8 @@ export default function FormEditor() {
   if (isLoading) return <Loading />;
 
   return (
-    <Container>
-      <h1>Detail Pokedeck</h1>
-      <div className="flex gap-6 flex-col lg:flex-row">
+    <Container className="mt-8">
+      <div className="flex gap-12 flex-col lg:flex-row justify-center items-center">
         <DeckDetail deckData={data} fetchError={fetchError} />
         <DeckForm deckData={data} isCreateDeck={isCreateDeck} />
       </div>
